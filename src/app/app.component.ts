@@ -3,6 +3,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { ProductoService } from './_servicios/producto.service';
 import { Producto } from './_modelo/Producto';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -33,8 +34,12 @@ export class AppComponent implements OnInit{
   }
 
   eliminarProducto(id: number) {
-      this.servicio.eliminarProducto(id).subscribe();
-      this.listar();
+      this.servicio.eliminarProducto(id).pipe(
+        switchMap(() => this.servicio.listar())
+      ).subscribe((data)=>{
+        this.productos = data;
+        this.listar();
+      });
   }
 
   modificarProducto(id: number) {
@@ -56,7 +61,14 @@ export class AppComponent implements OnInit{
         'stock':this.form.value['stock'],
         'precio_unitario':this.form.value['precio']
       }
-      this.servicio.modificar(p).subscribe();
+
+      this.servicio.modificar(p).pipe(
+        switchMap(() => this.servicio.listar())
+      ).subscribe((data)=>{
+        this.productos = data;
+        this.listar();
+      });
+      
     }else{
       let p:Producto = {
         'id_producto' : 0,
@@ -64,8 +76,13 @@ export class AppComponent implements OnInit{
         'stock':this.form.value['stock'],
         'precio_unitario':this.form.value['precio']
       }
-      this.servicio.alta(p).subscribe();
+
+      this.servicio.alta(p).pipe(
+        switchMap(() => this.servicio.listar())
+      ).subscribe((data)=>{
+        this.productos = data;
+        this.listar();
+      });
     }
-    this.listar();
   }
 }

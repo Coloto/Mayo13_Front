@@ -1,4 +1,3 @@
-<h1>1sdf</h1>
 <table>
     <tr>
         <th>Id</th>
@@ -19,12 +18,12 @@
 </table>
 
 <div>
-    <form [formGroup]="form" #frmproducto="ngForm" (ngSubmit)="useForm()" id="formulario_producto">
+    <form [formGroup]="form" (ngSubmit)="useForm()" id="formulario_producto">
         <input name="id" type="number" placeholder="Id producto" required formControlName="id_producto" hidden>
         <input name="nombre" type="text" placeholder="Nombre de producto" required formControlName="nombreProducto">
         <input name="stock" type="number" placeholder="Stock de producto" required formControlName="stock">
         <input name="precio" type="number" placeholder="Precio unitario" required formControlName="precio">
         
-        <button type="submit" [disabled]="frmproducto.invalid">Aceptar</button>
+        <button type="submit" [disabled]="!form">Aceptar</button>
      </form>   
  </div>
